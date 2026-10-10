@@ -5,25 +5,11 @@ import { ThermometherIcon } from './icons/ThermometerIcon';
 import { DropIcon } from './icons/DropIcon';
 import { WindIcon } from './icons/WindIcon';
 import { SpeedometerIcon } from './icons/SpeedometerIcon';
-
-const daysOfWeek = [
-  'Domingo',
-  'Segunda-feira',
-  'Terça-feira',
-  'Quarta-feira',
-  'Quinta-feira',
-  'Sexta-feira',
-  'Sábado'
-];
-
-const months = [
-  "Janeiro", "Fevereiro", "Março", "Abril",
-  "Maio", "Junho", "Julho", "Agosto",
-  "Setembro", "Outubro", "Novembro", "Dezembro"
-];
+import { ArrowClockWiseIcon } from './icons/ArrowClockWiseIcon';
+import { daysOfWeek, months } from '../../util/date';
 
 function Card({ children }) {
-  return <div className='flex flex-1 ring gap-x-2 items-center p-4 rounded-lg'>
+  return <div className='shadow-xs flex flex-1 items-center ring gap-x-2 p-2 rounded-lg'>
     {children}
   </div>
 }
@@ -35,6 +21,27 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
   const month = months[date.getMonth()];
   const year = date.getFullYear();
   const hours = data.location.localtime.split(" ")[1];
+
+  let result = '';
+
+  {
+    const updatedAt = data.current.last_updated_epoch * 1000;
+    const diff = Date.now() - updatedAt;
+    const minutes = Math.floor(diff / (1000 * 60));
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+    if (minutes < 1) {
+      result = "Agora mesmo";
+    } else if (minutes < 60) {
+      result = `há ${minutes} min`;
+    } else if (hours < 24) {
+      result = `há ${hours} h`;
+    } else {
+      result = `há ${days} dias`;
+    }
+  }
+
 
   const cardsMetada = [
     {
@@ -60,13 +67,20 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
   ];
 
   return (
-    <div className="w-full text-white flex flex-col gap-y-4 mx-auto ring p-4 rounded-xl">
+    <div className="w-full text-white flex flex-col gap-y-4 mx-auto ring p-4 rounded-xl shadow-xl bg-gray-900/25">
 
-      <div className='text-2xl flex gap-x-2'>
-        <GeoIcon />
-        <div className='flex flex-col'>
-          <strong>{data.location.name}, {data.location.region}</strong>
-          <p>{dayOfWeek}, {day} de {month} de {year} • {hours}</p>
+      <div className='text-sm md:text-2xl flex gap-x-2 justify-between'>
+        <div className='flex'>
+          <div><GeoIcon /></div>
+          <div className='ml-2 flex flex-col'>
+            <strong>{data.location.name}, {data.location.region}</strong>
+            <p>{dayOfWeek}, {day} de {month} de {year} • {hours}</p>
+          </div>
+        </div>
+
+        <div style={{ backgroundColor: '#47a0dd' }} className='shadow-md text-xs md:text-base flex gap-x-1 items-center p-2 self-start rounded-4xl bg-gray-500'>
+          <div className='text-2xl'><ArrowClockWiseIcon /></div>
+          <div> Atualizado {result}</div>
         </div>
       </div>
 
@@ -84,15 +98,15 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
         </div>
       </div>
 
-      <div className='flex flex-col lg:flex-row gap-2'>
+      <div className='grid sm:grid-cols-2 md:grid-cols-4 gap-2'>
         {
           cardsMetada.map(e => (
             <Card key={e.title}>
-              <div className='text-4xl p-4 rounded-full ring bg-white/25'>
+              <div className='p-4 rounded-full aspect-square flex items-center justify-center ring bg-white/25'>
                 <e.Icon />
               </div>
 
-              <div className='flex flex-col'>
+              <div className='flex flex-col justify-between'>
                 <strong>
                   {e.title}
                 </strong>

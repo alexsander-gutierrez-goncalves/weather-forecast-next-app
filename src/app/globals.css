@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .scrollbar::-webkit-scrollbar {
-  height: 10px;
+  height: 4px;
 }
 
 .scrollbar::-webkit-scrollbar-track {
@@ -19,6 +19,6 @@
 }
 
 body {
-  background: #002255ff;
+  background: linear-gradient(#209ae9, #3ab7f8) no-repeat;
   min-height: 100vh;
 }

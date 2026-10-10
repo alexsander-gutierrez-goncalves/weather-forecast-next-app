@@ -34,7 +34,7 @@ export default function Home() {
       const { current, forecast } = await getData(`${latitude},${longitude}`);
       setData({ current, forecast })
     }, error => {
-
+      alert(error.message)
     })
   }
 
@@ -45,7 +45,8 @@ export default function Home() {
           <SearchInput ref={inputRef} />
 
           <button
-            className="p-5 text-white ring cursor-pointer bg-blue-500 rounded-full shadow-md hover:scale-105 focus:outline-white focus:outline"
+            style={{ backgroundColor: '#1279fb' }}
+            className="p-5 text-white ring cursor-pointer rounded-full shadow-md hover:scale-105 focus:outline-white focus:outline"
             type="button"
             aria-label="buscar"
             title="buscar"
@@ -54,7 +55,7 @@ export default function Home() {
             <MagnifyGlassIcon />
           </button>
 
-          <button onClick={onClickGetCurrentPosition} className='rounded-full ring p-3 text-sm cursor-pointer text-white' type='button'>
+          <button onClick={onClickGetCurrentPosition} className='rounded-full ring p-3 text-sm cursor-pointer text-white hover:scale-105' type='button'>
             <GeoIcon />
           </button>
         </div>
