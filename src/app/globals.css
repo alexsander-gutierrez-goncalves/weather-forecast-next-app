@@ -6,7 +6,7 @@
 
 .scrollbar::-webkit-scrollbar-track {
   border-radius: 100vh;
-  background: transparent;
+  background: none;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
