@@ -4,16 +4,17 @@ import { CalendarIcon } from "./icons/CalendarIcon";
 import Image from "next/image";
 import { UmbrellaIcon } from "./icons/UmbrellaIcon";
 import { daysOfWeekShort } from "../../util/date";
+import { HTMLAttributes } from "react";
 
-function Card({ children }) {
-  return <div className="text-white rounded-lg flex flex-col items-center p-4 ring-white ring shadow-lg">
+function Card({ children, style }: HTMLAttributes<HTMLDivElement>) {
+  return <div style={style} className="shrink-0 justify-between text-white rounded-lg flex flex-col items-center p-4 ring-white ring shadow-lg">
     {children}
   </div>
 }
 
+const colors = ['#116ccd', '#5b33bb', '#f0772d']
+
 export function Forecast({ forecast }: { forecast: ForecastReponse }) {
-
-
 
   const getDayOfWeek = (value: string) => {
     const date = new Date(value);
@@ -24,17 +25,19 @@ export function Forecast({ forecast }: { forecast: ForecastReponse }) {
     return { dayOfWeek, day, month };
   }
 
+  const currentHour = new Date().getTime()
+  const hours = forecast.forecast.forecastday[0].hour.filter(e => e.time_epoch * 1000 >= currentHour)
 
   return <div className="flex flex-col gap-4">
-    <div className="p-4 ring ring-white rounded-2xl bg-gray-900/25">
+    <div className="p-4 ring ring-white rounded-2xl bg-[#0b2b5b]">
       <div className="text-white flex items-center gap-2">
         <ClockIcon />
         <p>Previsão por hora</p>
       </div>
-      <div className="flex scrollbar overflow-x-auto gap-4 p-4">
+      <div className="flex overflow-x-auto gap-4 p-4">
         {
-          forecast.forecast.forecastday[0].hour.map((e, i) => (
-            <Card key={e.time}>
+          hours.map((e, i) => (
+            <Card key={e.time} style={{ backgroundColor: i == 0 ? '#116ccd' : '' }} >
               <strong>{i == 0 ? "Agora" : e.time.split(" ")[1]}</strong>
               <Image
                 src={`https:${e.condition.icon}`}
@@ -42,35 +45,41 @@ export function Forecast({ forecast }: { forecast: ForecastReponse }) {
                 height={64}
                 alt="icon"
               />
-              <p>{e.temp_c}°</p>
+              <strong>{e.temp_c}°</strong>
             </Card>
           ))
         }
       </div>
     </div>
 
-    <div className="p-4 ring ring-white rounded-2xl bg-gray-900/25">
+    <div className="p-4 ring ring-white rounded-2xl bg-[#0b2b5b]">
       <div className="text-white flex items-center gap-2">
         <CalendarIcon />
         <p>Previsão para {forecast.forecast.forecastday.length} dias</p>
       </div>
-      <div className="flex scrollbar overflow-x-auto gap-4 p-4">
+      <div className="flex overflow-x-auto gap-4 p-4">
         {
-          forecast.forecast.forecastday.map(e => {
+          forecast.forecast.forecastday.map((e, i) => {
             const { dayOfWeek, day, month } = getDayOfWeek(e.date);
 
-            return <Card key={e.date_epoch}>
-              <strong>{dayOfWeek}</strong>
-              <strong>{`${day}/${month}`}</strong>
-              <Image
-                src={`https:${e.day.condition.icon}`}
-                width={64}
-                height={64}
-                alt="icon"
-              />
-              <p>{e.day.maxtemp_c}° <span className="text-gray-400">{e.day.mintemp_c}°</span></p>
-              <div className="flex items-center gap-2 text-gray-300">
+            return <Card key={e.date_epoch} style={{ backgroundColor: colors[i] }} >
+              <div className="flex items-center">
+                <Image
+                  src={`https:${e.day.condition.icon}`}
+                  width={64}
+                  height={64}
+                  alt="icon"
+                />
+
+                <div className="flex flex-col justify-between">
+                  <strong>{dayOfWeek}</strong>
+                  {/* <strong>{`${day}/${month}`}</strong> */}
+
+                  <strong>{e.day.maxtemp_c}° / {e.day.mintemp_c}°</strong>
+                </div>
+                {/* <div className="flex items-center gap-2 text-gray-300">
                 <UmbrellaIcon />{e.day.daily_chance_of_rain}%
+              </div> */}
               </div>
             </Card>
           })

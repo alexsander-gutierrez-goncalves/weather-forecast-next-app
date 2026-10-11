@@ -8,8 +8,8 @@ import { SpeedometerIcon } from './icons/SpeedometerIcon';
 import { ArrowClockWiseIcon } from './icons/ArrowClockWiseIcon';
 import { daysOfWeek, months } from '../../util/date';
 
-function Card({ children }) {
-  return <div className='shadow-xs flex flex-1 items-center ring gap-x-2 p-2 rounded-lg'>
+function Card({ children, style }) {
+  return <div style={style} className='shadow-xs flex flex-1 items-center gap-x-2 p-2 rounded-xl'>
     {children}
   </div>
 }
@@ -42,32 +42,39 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
     }
   }
 
-
   const cardsMetada = [
     {
-      title: "Sensação térmica",
+      title: 'Sensação térmica',
       subtitle: `${data.current.feelslike_c}°C`,
-      Icon: ThermometherIcon
+      Icon: ThermometherIcon,
+      backgroundColor: '#116ccd',
+      iconColor: '#48a6fd'
     },
     {
-      title: "Umidade do ar",
+      title: 'Umidade do ar',
       subtitle: `${data.current.humidity}%`,
-      Icon: DropIcon
+      Icon: DropIcon,
+      backgroundColor: '#0b8274',
+      iconColor: '#23cca0'
     },
     {
-      title: "Velocidade do vento",
+      title: 'Velocidade do vento',
       subtitle: `${data.current.wind_kph} km/h ${data.current.wind_dir}`,
-      Icon: WindIcon
+      Icon: WindIcon,
+      backgroundColor: '#5b33bb',
+      iconColor: '#9c65f4'
     },
     {
-      title: "Pressão atmosférica",
+      title: 'Pressão atmosférica',
       subtitle: `${data.current.pressure_mb} hPa`,
-      Icon: SpeedometerIcon
+      Icon: SpeedometerIcon,
+      backgroundColor: '#f0772d',
+      iconColor: '#fec738'
     }
   ];
 
   return (
-    <div className="w-full text-white flex flex-col gap-y-4 mx-auto ring p-4 rounded-xl shadow-xl bg-gray-900/25">
+    <div className='bg-[#0b2b5b] w-full text-white flex flex-col gap-y-4 mx-auto ring p-4 rounded-xl shadow-xl'>
 
       <div className='text-sm md:text-2xl flex gap-x-2 justify-between'>
         <div className='flex'>
@@ -78,7 +85,7 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
           </div>
         </div>
 
-        <div style={{ backgroundColor: '#47a0dd' }} className='shadow-md text-xs md:text-base flex gap-x-1 items-center p-2 self-start rounded-4xl bg-gray-500'>
+        <div className='bg-[#47a0dd] shadow-md text-xs md:text-base flex gap-x-1 items-center p-2 self-start rounded-4xl'>
           <div className='text-2xl'><ArrowClockWiseIcon /></div>
           <div> Atualizado {result}</div>
         </div>
@@ -101,8 +108,8 @@ export function CurrentWeather({ data }: { data: CurrentWeatherResponse }) {
       <div className='grid sm:grid-cols-2 md:grid-cols-4 gap-2'>
         {
           cardsMetada.map(e => (
-            <Card key={e.title}>
-              <div className='p-4 rounded-full aspect-square flex items-center justify-center ring bg-white/25'>
+            <Card key={e.title} style={{ backgroundColor: e.backgroundColor }}>
+              <div className='text-2xl p-4 rounded-full aspect-square flex items-center justify-center' style={{ backgroundColor: e.iconColor }}>
                 <e.Icon />
               </div>
 

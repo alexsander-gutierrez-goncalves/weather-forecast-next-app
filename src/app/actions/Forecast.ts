@@ -104,7 +104,7 @@ export type ForecastReponse = {
 export async function getForecast(q: string): Promise<ForecastReponse | null> {
   if (!q) return null;
   try {
-    const url = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.API_KEY}&q=${q}&days=14&aqi=no&lang=pt`
+    const url = `http://api.weatherapi.com/v1/forecast.json?key=${process.env.API_KEY}&q=${q}&days=3&aqi=no&lang=pt`
     const request = await fetch(url, { next: { revalidate: 1 } })
     return await request.json();
   } catch (error) {
