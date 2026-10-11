@@ -2,7 +2,6 @@ import { ForecastReponse } from "../actions/Forecast";
 import { ClockIcon } from "./icons/ClockIcon";
 import { CalendarIcon } from "./icons/CalendarIcon";
 import Image from "next/image";
-import { UmbrellaIcon } from "./icons/UmbrellaIcon";
 import { daysOfWeekShort } from "../../util/date";
 import { HTMLAttributes } from "react";
 
@@ -73,13 +72,8 @@ export function Forecast({ forecast }: { forecast: ForecastReponse }) {
 
                 <div className="flex flex-col justify-between">
                   <strong>{dayOfWeek}</strong>
-                  {/* <strong>{`${day}/${month}`}</strong> */}
-
                   <strong>{e.day.maxtemp_c}° / {e.day.mintemp_c}°</strong>
                 </div>
-                {/* <div className="flex items-center gap-2 text-gray-300">
-                <UmbrellaIcon />{e.day.daily_chance_of_rain}%
-              </div> */}
               </div>
             </Card>
           })
